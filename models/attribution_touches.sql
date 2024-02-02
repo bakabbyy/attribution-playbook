@@ -29,7 +29,8 @@ sessions_before_conversion as (
     left join customer_conversions using (customer_id)
 
     where sessions.started_at <= customer_conversions.converted_at
-        and sessions.started_at >= dateadd(days, -30, customer_conversions.converted_at)
+--         and sessions.started_at >= dateadd('day', -30, customer_conversions.converted_at)
+        and sessions.started_at >= customer_conversions.converted_at - INTERVAL '30 day'
 
 ),
 
@@ -56,15 +57,28 @@ with_points as (
             else 0.2 / (total_sessions - 2)
         end as forty_twenty_forty_points,
 
-        1.0 / total_sessions as linear_points,
+        1.0 / total_sessions as linear_points
 
+--         revenue * first_touch_points as first_touch_revenue,
+--         revenue * last_touch_points as last_touch_revenue,
+--         revenue * forty_twenty_forty_points as forty_twenty_forty_revenue,
+--         revenue * linear_points as linear_revenue
+
+    from sessions_before_conversion
+
+),
+
+with_revenue as (
+
+    select
+        *,
         revenue * first_touch_points as first_touch_revenue,
         revenue * last_touch_points as last_touch_revenue,
         revenue * forty_twenty_forty_points as forty_twenty_forty_revenue,
         revenue * linear_points as linear_revenue
 
-    from sessions_before_conversion
+    from with_points
 
 )
 
-select * from with_points
+select * from with_revenue

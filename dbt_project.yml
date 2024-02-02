@@ -1,18 +1,18 @@
-name: acme
+name: 'acme'
 
-profile: playbook
+profile: 'playbook'
 
 version: '1.0'
 
 require-dbt-version: ">=0.16.0"
 
-source-paths: ["models"]
+model-paths: ["models"]
 analysis-paths: ["analysis"]
 test-paths: ["tests"]
-data-paths: ["data"]
+seed-paths: ["data"]
 macro-paths: ["macros"]
 
-target-path: "target"
+#target-path: "target"
 clean-targets:
     - "target"
     - "dbt_modules"

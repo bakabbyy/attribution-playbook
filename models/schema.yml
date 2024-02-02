@@ -57,6 +57,6 @@ models:
         tests:
           - not_null
 
-      - name: linear_attribution_revenue
+      - name: linear_revenue
         tests:
           - not_null
